@@ -23,13 +23,18 @@
                 @endforeach
                 <div class="col-md-4">
                     <label class="form-label">Ресторан *</label>
-                    <select name="restaurant_id" class="form-select @error('restaurant_id') is-invalid @enderror" required>
+                    <select name="restaurant_id" id="restaurant" class="form-select @error('restaurant_id') is-invalid @enderror" required>
                         <option value="">Выберите...</option>
                         @foreach ($restaurants as $r)
                             <option value="{{ $r->id }}" @selected(old('restaurant_id', $employer->restaurant_id) == $r->id)>{{ $r->name ?? $r->slug }}</option>
                         @endforeach
                     </select>
                     @error('restaurant_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Город</label>
+                    <select name="city_id" id="city" class="form-select @error('city_id') is-invalid @enderror"></select>
+                    @error('city_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
                 <div class="col-12">
                     <div class="form-check form-switch">
@@ -44,4 +49,21 @@
         </form>
     </div>
 </div>
+@push('scripts')
+    <script>
+        const map = @json($restaurants->mapWithKeys(fn ($r) => [$r->id => $r->cities->map(fn ($c) => ['id' => $c->id, 'name' => $c->name])->values()]));
+        const rs = document.getElementById('restaurant'), cs = document.getElementById('city');
+        let selected = {{ (int) old('city_id', $employer->city_id) }};
+
+        function fillCities() {
+            const list = map[rs.value] || [];
+            cs.innerHTML = '<option value="">' + (list.length ? '— не указан —' : 'У ресторана нет городов') + '</option>';
+            list.forEach(c => cs.add(new Option(c.name, c.id, false, c.id === selected)));
+            cs.disabled = !list.length;
+        }
+        rs.addEventListener('change', () => { selected = 0; fillCities(); });
+        cs.addEventListener('change', () => selected = parseInt(cs.value) || 0);
+        fillCities();
+    </script>
+@endpush
 @endsection

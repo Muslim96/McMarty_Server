@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CityController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\FineController;
@@ -44,4 +45,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('users', UserController::class)
         ->except('show')->middleware('can:users.manage');
+
+    Route::resource('cities', CityController::class)
+        ->except('show')->middleware('can:cities.manage');
 });

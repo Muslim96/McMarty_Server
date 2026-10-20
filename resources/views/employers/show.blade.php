@@ -21,6 +21,7 @@
                 <dt class="col-5 text-muted fw-normal">Email</dt><dd class="col-7 text-break">{{ $employer->email ?? '-' }}</dd>
                 <dt class="col-5 text-muted fw-normal">Дата рождения</dt><dd class="col-7">{{ $employer->birth_date?->format('d.m.Y') ?? '-' }}</dd>
                 <dt class="col-5 text-muted fw-normal">Принят</dt><dd class="col-7">{{ $employer->hired_at?->format('d.m.Y') ?? '-' }}</dd>
+                <dt class="col-5 text-muted fw-normal">Город</dt><dd class="col-7">{{ $employer->city?->name ?? '-' }}</dd>
             </dl>
         </div></div>
     </div>

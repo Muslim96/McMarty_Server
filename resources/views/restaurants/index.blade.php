@@ -11,7 +11,7 @@
     </div>
     <div class="table-responsive">
         <table class="table align-middle mb-0">
-            <thead><tr><th>Ресторан</th><th>Slug</th><th>Сотрудников</th><th class="text-end">Действия</th></tr></thead>
+            <thead><tr><th>Ресторан</th><th>Slug</th><th>Города</th><th>Сотрудников</th><th class="text-end">Действия</th></tr></thead>
             <tbody>
             @forelse ($restaurants as $r)
                 <tr>
@@ -19,6 +19,7 @@
                         @if ($r->logo_url)<img src="{{ $r->logo_url }}" class="logo-sm" alt="">@else<div class="logo-sm"><i class="bi bi-shop"></i></div>@endif
                         <span class="fw-semibold">{{ $r->name ?? '-' }}</span></div></td>
                     <td><code>{{ $r->slug }}</code></td>
+                    <td>@forelse ($r->cities as $c)<span class="badge text-bg-light me-1">{{ $c->name }}</span>@empty<span class="text-muted">—</span>@endforelse</td>
                     <td><a href="{{ route('employers.index', ['restaurant_id' => $r->id]) }}" class="badge text-bg-light text-decoration-none">{{ $r->employers_count }}</a></td>
                     <td class="text-end">
                         <a href="{{ route('restaurants.edit', $r) }}" class="btn btn-sm btn-light"><i class="bi bi-pencil"></i></a>

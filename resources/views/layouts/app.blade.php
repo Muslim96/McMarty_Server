@@ -19,7 +19,7 @@
         <div class="nav-title">Главное</div>
         <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"><i class="bi bi-grid-1x2"></i>Дашборд</a>
 
-        @canany(['restaurants.manage', 'employers.view'])
+        @canany(['restaurants.manage', 'cities.manage', 'employers.view'])
             <div class="nav-title">Команда</div>
         @endcanany
         @can('restaurants.manage')
@@ -27,6 +27,9 @@
         @endcan
         @can('employers.view')
             <a href="{{ route('employers.index') }}" class="nav-link {{ request()->routeIs('employers.*') ? 'active' : '' }}"><i class="bi bi-people"></i>Сотрудники</a>
+        @endcan
+        @can('cities.manage')
+            <a href="{{ route('cities.index') }}" class="nav-link {{ request()->routeIs('cities.*') ? 'active' : '' }}"><i class="bi bi-geo-alt"></i>Города</a>
         @endcan
 
         @canany(['fines.view', 'fine-reasons.manage'])

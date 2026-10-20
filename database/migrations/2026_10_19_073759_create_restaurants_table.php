@@ -19,6 +19,12 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('city_restaurant', function (Blueprint $table) {
+            $table->foreignId('city_id')->constrained('cities')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('restaurant_id')->constrained('restaurants')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->primary(['city_id', 'restaurant_id']);
+        });
+
         Schema::table('users', function (Blueprint $table) {
             $table->foreign('restaurant_id')->references('id')->on('restaurants')
                 ->nullOnDelete()->cascadeOnUpdate();
@@ -30,6 +36,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('city_restaurant');
         Schema::dropIfExists('restaurants');
     }
 };

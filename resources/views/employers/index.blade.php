@@ -31,7 +31,7 @@
                 <tr>
                     <td><a href="{{ route('employers.show', $e) }}" class="d-flex align-items-center gap-3 text-decoration-none text-reset">
                         <div class="ava-sm">{{ $e->initials }}</div><span class="fw-semibold">{{ $e->full_name }}</span></a></td>
-                    <td>{{ $e->restaurant->name ?? $e->restaurant->slug }}</td>
+                    <td>{{ $e->restaurant->name ?? $e->restaurant->slug }}@if ($e->city)<div><small class="text-muted"><i class="bi bi-geo-alt"></i> {{ $e->city->name }}</small></div>@endif</td>
                     <td>{{ $e->position ?? '-' }}</td>
                     <td><div>{{ $e->phone ?? '-' }}</div><small class="text-muted">{{ $e->email }}</small></td>
                     <td>@if ($e->active_fines_sum > 0)<span class="text-danger fw-semibold">@money($e->active_fines_sum)</span>@else<span class="text-muted">-</span>@endif</td>

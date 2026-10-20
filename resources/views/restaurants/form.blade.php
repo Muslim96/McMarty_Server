@@ -16,6 +16,15 @@
                 <input name="slug" value="{{ old('slug', $restaurant->slug) }}" class="form-control @error('slug') is-invalid @enderror" placeholder="Сгенерируется из названия">
                 @error('slug')<div class="invalid-feedback">{{ $message }}</div>@enderror
             </div>
+            <div class="mb-3">
+                <label class="form-label">Города, где работает ресторан</label>
+                <select name="city_ids[]" multiple class="js-select" placeholder="Выберите города...">
+                    @foreach ($cities as $c)
+                        <option value="{{ $c->id }}" @selected(in_array($c->id, old('city_ids', $restaurant->cities->pluck('id')->all())))>{{ $c->name }}</option>
+                    @endforeach
+                </select>
+                @error('city_ids.*')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+            </div>
             <div class="mb-4">
                 <label class="form-label">Логотип</label>
                 @if ($restaurant->logo_url)<div class="mb-2"><img src="{{ $restaurant->logo_url }}" class="logo-sm" style="width:64px;height:64px" alt=""></div>@endif

@@ -18,7 +18,7 @@
 <body>
 <div class="box">
     <div class="logo"><i class="bi bi-egg-fried"></i></div>
-    <h4 class="text-center fw-bold mb-1">Staff<span style="color:#4f46e5">Admin</span></h4>
+    <h4 class="text-center fw-bold mb-1">Менедж<span style="color:#4f46e5">мент</span></h4>
     <p class="text-center text-muted mb-4">Войдите в панель управления</p>
     <form method="POST" action="{{ route('login.attempt') }}">
         @csrf

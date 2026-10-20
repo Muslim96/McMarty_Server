@@ -11,7 +11,7 @@ class Employer extends Model
 {
     protected $fillable = [
         'surname', 'name', 'patronymic', 'birth_date', 'phone', 'email',
-        'position', 'hired_at', 'is_active', 'restaurant_id',
+        'position', 'hired_at', 'is_active', 'restaurant_id', 'city_id',
     ];
 
     protected function casts(): array
@@ -31,6 +31,11 @@ class Employer extends Model
     public function fines(): HasMany
     {
         return $this->hasMany(Fine::class);
+    }
+
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class);
     }
 
     public function getFullNameAttribute(): string

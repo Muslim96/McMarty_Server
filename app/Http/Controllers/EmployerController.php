@@ -6,6 +6,7 @@ use App\Models\Employer;
 use App\Models\Fine;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class EmployerController extends Controller
 {
@@ -13,7 +14,7 @@ class EmployerController extends Controller
     {
         $u = $request->user();
 
-        $employers = Employer::with('restaurant')
+        $employers = Employer::with(['restaurant', 'city'])
             ->withSum(['fines as active_fines_sum' => fn ($q) => $q->where('status', Fine::ACTIVE)], 'amount')
             ->visibleTo($u)
             ->when($request->q, fn ($q, $s) => $q->search($s))
@@ -30,7 +31,7 @@ class EmployerController extends Controller
     {
         $this->authorizeRestaurant($request, $employer);
 
-        $employer->load('restaurant');
+        $employer->load('restaurant', 'city');
         $fines = $employer->fines()->with(['reason', 'issuer'])->latest('fined_at')->latest('id')->get();
 
         return view('employers.show', compact('employer', 'fines'));
@@ -40,7 +41,7 @@ class EmployerController extends Controller
     {
         return view('employers.form', [
             'employer'    => new Employer(['is_active' => true, 'restaurant_id' => $request->user()->restrictedRestaurantId() ?: $request->restaurant_id]),
-            'restaurants' => Restaurant::visibleTo($request->user())->orderBy('name')->get(),
+            'restaurants' => Restaurant::visibleTo($request->user())->with('cities:id,name')->orderBy('name')->get(),
         ]);
     }
 
@@ -57,7 +58,7 @@ class EmployerController extends Controller
 
         return view('employers.form', [
             'employer'    => $employer,
-            'restaurants' => Restaurant::visibleTo($request->user())->orderBy('name')->get(),
+            'restaurants' => Restaurant::visibleTo($request->user())->with('cities:id,name')->orderBy('name')->get(),
         ]);
     }
 
@@ -94,6 +95,7 @@ class EmployerController extends Controller
             'position'      => ['nullable', 'string', 'max:255'],
             'hired_at'      => ['nullable', 'date'],
             'restaurant_id' => ['required', 'exists:restaurants,id'],
+            'city_id'       => ['nullable', Rule::exists('city_restaurant', 'city_id')->where('restaurant_id', $request->input('restaurant_id'))],
         ]);
         $data['is_active'] = $request->boolean('is_active');
 
